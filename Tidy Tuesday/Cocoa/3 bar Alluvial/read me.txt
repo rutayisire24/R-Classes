@@ -1,0 +1,3 @@
+The purpose of this exercise is to take the learner through the process of drawing alluvial plots.
+
+source code; https://github.com/lau-cloud/TidyTuesdaycode/blob/master/follow_the_cacao/scipt.R
