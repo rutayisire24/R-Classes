@@ -1,0 +1,9 @@
+Instructions for today’s class
+-	Create a folder called ‘linelist’ where you save your R work
+-	Inside the line list folder create a folder called “data”
+-	Paste all files shared in the WhatsApp in the “data” folder
+-	Go to your rstudio and create a project using existing directory
+-	Select the folder “linelist” you just created
+-	Save your project
+-	Copy the “linelist.R” script file to the “linelist” folder
+-	Follow the code in the “linelist.R” file
