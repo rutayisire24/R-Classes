@@ -4,7 +4,8 @@
 library(tidyverse) 
 library(readr)
 
-theme_set(theme_bw())
+
+
 
 #load_data
 
@@ -15,6 +16,13 @@ glimpse(chic)
 
 head(chic,10)
 
+
+## set theme 
+
+
+theme_set(theme_bw())
+
+## start plotting 
 g <- ggplot(chic, aes(x = date, y = temp))
 
 g
@@ -141,7 +149,7 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
         plot.title = element_text(face = "bold",
                                   margin = margin(10, 0, 10, 0),
                                   size = 14))
-
-ggsave("second_plot.png")
+## save the plot 
+ggsave("second_plot.jpg", width = 9, height = 6)
 
         
