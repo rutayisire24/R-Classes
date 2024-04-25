@@ -1,3 +1,5 @@
+
+## load packages 
 library(tidyverse) # includes ggplot2 and other data management tools
 library(readxl)    # read excel files 
 library(janitor)   # cleaning and summary tables
@@ -15,7 +17,14 @@ dataPath <- here("data","linelist_cleaned.xlsx")
 dataPath
 
 # import data
+
+#linelist_version = read_excel(here('Data/linelist_cleaned.xlsx'))
 linelist <- read_excel( dataPath )
+
+## preview 
+glimpse(linelist)
+head(linelist)
+
 
 # This will create plot that is a blank canvas
 ggplot(data = linelist)
@@ -24,28 +33,33 @@ ggplot(data = linelist)
 ggplot(data = linelist, mapping = aes(x = age, y = wt_kg))+
   geom_point()
 
+ggplot(data = linelist, mapping = aes(x = age, y = wt_kg))+
+  geom_point(color = "#0077b6",  size = 0.3)
+
 # create histogram to show distribution of age
 ggplot(data = linelist, mapping = aes(x = age))+
   geom_histogram()
+
+ggplot(data = linelist, mapping = aes(x = age))+
+  geom_histogram(color = "white", fill = "blue")
 
 
 # scatterplot with green dots. 
 # Note that the color is NOT in the aes when we want a uniform color
 
 ggplot(data = linelist, mapping = aes(x = age, y = wt_kg))+  # set data and axes mapping
-  geom_point(color = "darkgreen", size = 0.5, alpha = 0.2)         # set static point aesthetics
+  geom_point(color = "darkblue", size = 0.2, alpha = 0.8)         # set static point aesthetics
 
 # histogram
 # we specify a uniform fill color and uniform border color
 # AGAIN, this is out side the eas
 
 ggplot(data = linelist, mapping = aes(x = age))+       # set data and axes
-  geom_histogram(              # display histogram
-    binwidth = 7,                # width of bins
+  geom_histogram(
+    bins = 5,                # width of bins                   # display histogram
     color = "red",               # bin line color
     fill = "blue",               # bin interior color
-    alpha = 0.1)                 # bin transparency
-
+    alpha = 0.2)                 # bin transparency
 # We include the color in the eas when we want coloring based on variable
 
 # This is what we call scaling - Adjusting attributes based on values
@@ -53,22 +67,22 @@ ggplot(data = linelist, mapping = aes(x = age))+       # set data and axes
 ggplot(data = linelist,     # set data
        mapping = aes(       # map aesthetics to column values
          x = age,           # map x-axis to age            
-         y = wt_kg,         # map y-axis to weight
-         color = age)       # map color to age
+         y = wt_kg, 
+         color = age_cat)       # map color to age
       ) +     
-      geom_point()         # display data as points 
+      geom_point(size = 0.3)         # display data as points 
 
 # scatterplot
 ggplot(data = linelist,     # set data
        mapping = aes(       # map aesthetics to column values
          x = age,           # map x-axis to age            
          y = wt_kg,         # map y-axis to weight
-         color = age,       # map color to age
+         color = age_cat,       # map color to age
          size = age)        # map size to age
        ) +                  
       geom_point(             # display data as points
-        shape = "diamond",      # points display as diamonds
-        alpha = 0.3)            # point transparency at 30%
+        shape = "diamond",
+        alpha = 0.6)            # point transparency at 30%
 
 # add line
 
@@ -77,14 +91,14 @@ ggplot(data = linelist,
          x = age,
          y = wt_kg,
          color = age_years)
-      ) + 
+      ) +  
+  geom_smooth(                  # add a trend line 
+    method = "lm",              # with linear method
+    size = 2)   +
       geom_point(                   # add points for each row of data
                 size = 1,
                 alpha = 0.5
-                ) +  
-      geom_smooth(                  # add a trend line 
-                method = "lm",              # with linear method
-                size = 2)                   # size (width of line) of 2
+                )                    # size (width of line) of 2
 
 # Where to make mapping assignments
 
@@ -118,9 +132,36 @@ ggplot(data = linelist,
 
 # import data
 
-mal_data_path <- here("data","malaria_facility_count_data.rds")
+mal_data_path <- here("Data","malaria_facility_count_data.rds")
+
 mal_data_path
+
+malaria_data <- malaria_facility_count_data
+
 malaria_data <- readRDS(mal_data_path)
+
+#explore the data 
+
+names(malaria_data) ## see names of columns 
+head(malaria_data) # shows first 5 obs
+glimpse(malaria_data) ## glimpses the data 
+
+## see unique districts
+unique(malaria_data$District)
+
+## plot general plot 
+
+ggplot(data = malaria_data, 
+       aes(x = data_date, y = malaria_tot))+
+  geom_col(width = 1, fill = "darkred")+
+  facet_wrap(~District) +
+  labs(title = "Malaria cases per District",
+       x = "Months ", y = "Malaria Cases")+
+  theme_minimal()
+
+
+## plots facets 
+
 
 # A plot with facets by district
 ggplot(malaria_data, aes(x = data_date, y = malaria_tot)) +
@@ -129,8 +170,15 @@ ggplot(malaria_data, aes(x = data_date, y = malaria_tot)) +
   labs(                                         # add plot labels, title, etc.
     x = "Date of report",
     y = "Malaria cases",
-    title = "Malaria cases by district") +
-  facet_wrap(~District)                       # the facets are created
+    title = "Malaria Incidence by district",
+    subtitle =  "The plot below shows the total number of malaria cases ",
+    caption = "Datasource: Whatsapp Group & Visual by: Meddy") +
+  facet_wrap(~District) 
+
+ggsave("first_plot.png" ,width = 5 , height = 5 )
+
+
+# the facets are created
 
 
 # assigning plots to objects
@@ -341,7 +389,39 @@ ggplot(data = linelist3, # filter retains non-missing gender/outcome
   facet_grid(gender ~ outcome) 
 
 
+##----------
 
+## line plot for incidence 
+
+plot_data <- linelist %>%
+  group_by(date_onset , outcome) %>%
+  count()
+
+plot_data$date_onset <- lubridate::ymd(plot_data$date_onset)
+
+saveRDS(plot_data, "Data/incidence_data.rds")
+
+line_plot <- ggplot(plot_data) +
+  aes(x = date_onset, y = n) +
+  geom_col(color = "#4682B4") +
+  geom_smooth(se = FALSE , color = "red")+
+  labs(
+    x = " ",
+    y = "Ebola Cases",
+    title = "Incidence of Unknown Disease(UD) 2014 - 2015",
+    subtitle = " The plot below shows the count of cases registered from April 2014 to May 2015",
+    caption = "Data Source: Unknown"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(limits = c(0,45), expand = c(0, 0)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+  scale_x_date(date_labels="%b %Y",date_breaks  ="1 month")
+
+line_plot
+
+ggsave("Incidence.pdf")
+
+esquisser()
 
 
 
