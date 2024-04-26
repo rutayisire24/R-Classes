@@ -17,32 +17,23 @@ p_load(patchwork)
 
 ## load the data 
 
-data_facility  <- MFL.Updated...21.feb
+#data_facility  <- MFL.Updated...21.feb
 
 ## facilities per region 
 
-data_region <- data_facility %>%
-  group_by(region) %>%
-  count()
+data_region <- readr::read_csv("https://raw.githubusercontent.com/rutayisire24/R-Classes/main/Ggplot_level2/data_region.csv")
 
-saveRDS(data_region,"data_region.rds")
 
 ## facilities by level
 
-data_level <- data_facility %>%
-  group_by(hflevel) %>%
-  count()  %>% 
-  filter ( n != 18)
-
-saveRDS(data_level,"data_level.rds")
+data_level <- readr::read_csv("https://raw.githubusercontent.com/rutayisire24/R-Classes/main/Ggplot_level2/data_level.csv")
 
 
 ## by authority
 
-data_authority <- data_facility %>%
-  group_by(authority) %>%
-  count() %>% 
-  filter ( n > 50)
+data_authority <- readr::read_csv("https://raw.githubusercontent.com/rutayisire24/R-Classes/main/Ggplot_level2/data_authority.csv")
 
-saveRDS(data_authority,"data_authority.rds")
 
+## Esquiser 
+
+esquisser()
