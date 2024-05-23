@@ -1,7 +1,11 @@
 ---
 title: "Mapping with ggplot"
 author: "Meddy Rutayisire"
-format: html
+format: 
+   html:
+     self-contained: true
+     toc: true
+message: false
 ---
 
 Class was inspired by works by Mel Moreno and Mathieu Basile found [Here](https://r-spatial.org/r/2018/10/25/ggplot2-sf.html)
@@ -24,7 +28,7 @@ Import and manipulate spatial data in R. Create a variety of maps using popular 
 
 ```{r}
 pacman::p_load(
- tidyverse,sf , rnaturalearth
+ tidyverse,sf , rnaturalearth, here
 )
 ```
 
@@ -66,8 +70,92 @@ ggplot(data = world_df) +
     geom_sf(color = "black", fill = "lightgreen")
 ```
 
+Filling colors based on a variable 
+
 ```{r}
 ggplot(data = world_df) +
     geom_sf(aes(fill = pop_est))
 ```
+
+### Customising to a color palette - Viridis 
+
+```{r}
+ggplot(data = world_df) +
+    geom_sf(aes(fill = pop_est)) +
+    scale_fill_viridis_c(option = "mako", trans = "sqrt")
+```
+
+### Customising to a color palette - Colorbrewer
+
+```{r}
+ggplot(data = world_df) +
+    geom_sf(aes(fill = pop_est)) +
+    scale_fill_distiller(palette = 2)
+```
+
+
+### Filtering to Africa
+
+```{r}
+world_df |> 
+  filter(continent == "Africa") |> 
+  ggplot() +
+  geom_sf(aes(fill = pop_est)) +
+  scale_fill_viridis_c(name = "Population (millions)", 
+                       breaks = c(1e6, 10e6, 20e6, 50e6, 100e6, 200e6),
+                       labels = c("1M", "10M", "20M", "50M", "100M", "200M"),
+                       option = "viridis") +
+  labs(title = "Map of Africa Showing Distribution of Populations") +
+  theme_void() +
+  theme(legend.position = "bottom")
+
+```
+
+### Explore several filters Views and Facetting 
+
+```{r}
+world_df |> 
+  filter(continent %in% c("Africa", "Europe")) |> 
+  ggplot() +
+  geom_sf()
+```
+
+
+## Ugandas Case Study 
+
+Load data 
+```{r}
+uganda_sp <- st_read(here("Shape Files/Districts and Cities/uganda_districts_2019-wgs84.shp"))
+```
+
+Plot basic Map 
+```{r}
+ggplot(data = uganda_sp)+
+  geom_sf()
+```
+
+Add water bodies 
+
+```{r}
+water_sp <- st_read(here("Shape Files/Water Bodies/UGA_water_areas_dcw.shp"))
+                    
+
+ ggplot(data = uganda_sp)+
+   geom_sf()+
+   geom_sf(data = water_sp)
+```
+
+Color the Water Bodies and Basic Styling 
+```{r}
+ggplot(data = uganda_sp)+
+  geom_sf()+
+  geom_sf(data = water_sp,fill = "lightblue")+
+  theme_void()+
+  labs(title = "Map of the Uganda", caption =  "DataSource: Open_Data_Uganda")
+```
+
+### Merge Data to Maps 
+
+
+
 
