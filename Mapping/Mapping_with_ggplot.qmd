@@ -1,0 +1,73 @@
+---
+title: "Mapping with ggplot"
+author: "Meddy Rutayisire"
+format: html
+---
+
+Class was inspired by works by Mel Moreno and Mathieu Basile found [Here](https://r-spatial.org/r/2018/10/25/ggplot2-sf.html)
+
+# Introduction to Mapping in R
+
+## Overview
+
+Welcome to the "Introduction to Mapping in R" class! This course is designed to provide you with the foundational skills needed to create and visualize geographic data using R.
+
+R is a powerful statistical programming language that offers extensive libraries and tools for working with spatial data, making it an excellent choice for mapping and geographic information system (GIS) applications.
+
+## Objectives
+
+By the end of this course, you will be able to: - Understand the basics of spatial data and geographic coordinate systems.
+
+Import and manipulate spatial data in R. Create a variety of maps using popular R packages. Customize maps to highlight specific data insights.
+
+## Getting Started
+
+```{r}
+pacman::p_load(
+ tidyverse,sf , rnaturalearth
+)
+```
+
+### Set Theme
+
+```{r}
+theme_set(theme_bw())
+```
+
+The package rnaturalearth provides a map of countries of the entire world. Use ne_countries to pull country data and choose the scale (rnaturalearthhires is necessary for scale = "large"). The function can return sp classes (default) or directly sf classes, as defined in the argument returnclass:
+
+```{r}
+world_df <- ne_countries(scale = "medium", returnclass = "sf")
+
+class(world_df)
+sample(names(world_df),10)
+```
+
+### Data and basic plot (ggplot and geom_sf)
+
+```{r}
+ggplot(data = world_df) +
+    geom_sf()
+```
+
+### Add labels
+
+```{r}
+ggplot(data = world_df) +
+    geom_sf() +
+    xlab("Longitude") + ylab("Latitude") +
+    labs(title = "World map")
+```
+
+### Add Color
+
+```{r}
+ggplot(data = world_df) + 
+    geom_sf(color = "black", fill = "lightgreen")
+```
+
+```{r}
+ggplot(data = world_df) +
+    geom_sf(aes(fill = pop_est))
+```
+
