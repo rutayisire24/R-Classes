@@ -78,7 +78,7 @@ region <- ggplot(data_region) +
 
 ## patchwork 
 
-combined_plot <-   plot_by_level  + region / authority_plot
+combined_plot <-   (plot_by_level  + (region / authority_plot))+ plot_annotation("A summary of Health facilities in Uganda by level , authority\n and regional distribuion")
 
 ggsave("combined_plot.jpg" , width =  10 , height =  8)
 

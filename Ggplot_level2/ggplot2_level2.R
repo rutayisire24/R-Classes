@@ -1,33 +1,28 @@
 
 ## load ggplot  in tidyverse
 
-library(tidyverse) 
-library(readr)
+library(tidyverse)  ## contains several libraries 
+library(readr) ## reads files 
 
-
-
-
-#load_data
+#load_data from the internet
 
 chic <- readr::read_csv("https://cedricscherer.com/data/chicago-nmmaps-custom.csv")
 
 #explore the data
 glimpse(chic)
 
-head(chic,10)
+head(chic,7)
 
-
-## set theme 
-
-
+## set ggplot theme 
 theme_set(theme_bw())
 
 ## start plotting 
-g <- ggplot(chic, aes(x = date, y = temp))
+g <- ggplot(data = chic, mapping = aes(x = date, y = temp))
 
-g
+#new_plot <- ggplot(chic, aes(date, temp))
 
 g + geom_point()
+new_plot + geom_point()
 
 g + geom_line()
 
@@ -36,7 +31,9 @@ g + geom_line()
 g + geom_line() + geom_point()
 
 ## customise the plot 
-g + geom_point(color = "firebrick", shape = "diamond", size = 2)
+g + geom_point(color = "firebrick", 
+               shape = "diamond", 
+               size = 1)
 
 
 ## change labels 
@@ -44,6 +41,9 @@ g + geom_point(color = "firebrick", shape = "diamond", size = 2)
 plot  <- ggplot(chic, aes(x = date, y = temp)) +
   geom_point(color = "firebrick") +
   labs(x = "Year", y = "Temperature (°F)")
+
+
+plot
 
 ## change the font size of each axis label  and placement 
 ## vjust refers to the vertical alignment, which usually ranges between 0 and 1
@@ -54,9 +54,10 @@ plot_labels <- plot +
   
 ## change color of the all axis  labels 
 
-plot_labels <- plot + 
-  theme(axis.title = element_text(size = 15,color = 'firebrick', 
-                                  face = "italic"))
+plot + 
+  theme(axis.title = element_text(size = 15,
+                                  color = 'firebrick', 
+                                  face = "bold"))
 
 #The face argument can be used to make the font bold or
 # italic or even bold.italic.
@@ -136,6 +137,8 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
 
 
 ## first comprehesive plot 
+install.packages("RcolorBrewer")
+library(RColorBrewer)
 
 ggplot(chic, aes(x = date, y = temp, color = season)) +
   geom_point() +
@@ -148,7 +151,9 @@ ggplot(chic, aes(x = date, y = temp, color = season)) +
         legend.background = element_rect(fill = "transparent"),
         plot.title = element_text(face = "bold",
                                   margin = margin(10, 0, 10, 0),
-                                  size = 14))
+                                  size = 14))+
+  scale_color_brewer(palette =  3)
+
 ## save the plot 
 ggsave("second_plot.jpg", width = 9, height = 6)
 

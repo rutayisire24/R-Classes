@@ -149,7 +149,24 @@ glimpse(malaria_data) ## glimpses the data
 ## see unique districts
 unique(malaria_data$District)
 
+
+### layers 
+
+ggplot(data = malaria_data, 
+       mapping = aes(x = data_date , y = malaria_tot))+
+  geom_col(fill = "darkblue")+
+  theme_minimal()+
+  facet_wrap(~District)+
+  labs(
+    x = "Months", 
+    y = "Malaria Cases", 
+    title = "Malaria Cases"
+  )
+
+ggsave("Malaria_ditrict_plot.jpg", width =  5 , height = 5)
+
 ## plot general plot 
+
 
 ggplot(data = malaria_data, 
        aes(x = data_date, y = malaria_tot))+
