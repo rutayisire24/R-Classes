@@ -8,11 +8,13 @@ format:
 message: false
 ---
 
-Class was inspired by works by Mel Moreno and Mathieu Basile found [Here](https://r-spatial.org/r/2018/10/25/ggplot2-sf.html)
+To view and code and materials for this class click [HERE](https://github.com/rutayisire24/R-Classes/tree/main/Mapping)
 
 # Introduction to Mapping in R
 
 ## Overview
+
+*Class was inspired by works by Mel Moreno and Mathieu Basile found [Here](https://r-spatial.org/r/2018/10/25/ggplot2-sf.html)*
 
 Welcome to the "Introduction to Mapping in R" class! This course is designed to provide you with the foundational skills needed to create and visualize geographic data using R.
 
@@ -38,7 +40,8 @@ pacman::p_load(
 theme_set(theme_bw())
 ```
 
-The package rnaturalearth provides a map of countries of the entire world. Use ne_countries to pull country data and choose the scale (rnaturalearthhires is necessary for scale = "large"). The function can return sp classes (default) or directly sf classes, as defined in the argument returnclass:
+The package rnaturalearth provides a map of countries of the entire world. Use ne_countries to pull country data and choose the scale
+(rnaturalearthhires is necessary for scale = "large"). The function can return sp classes (default) or directly sf classes, as defined in the argument returnclass:
 
 ```{r}
 world_df <- ne_countries(scale = "medium", returnclass = "sf")
@@ -59,30 +62,29 @@ ggplot(data = world_df) +
 ```{r}
 ggplot(data = world_df) +
     geom_sf() +
-    xlab("Longitude") + ylab("Latitude") +
-    labs(title = "World map")
+  theme_void()
 ```
 
 ### Add Color
 
 ```{r}
 ggplot(data = world_df) + 
-    geom_sf(color = "black", fill = "lightgreen")
+    geom_sf(color = "red", fill = "lightblue")
 ```
 
-Filling colors based on a variable 
+Filling colors based on a variable
 
 ```{r}
 ggplot(data = world_df) +
     geom_sf(aes(fill = pop_est))
 ```
 
-### Customising to a color palette - Viridis 
+### Customising to a color palette - Viridis
 
 ```{r}
 ggplot(data = world_df) +
     geom_sf(aes(fill = pop_est)) +
-    scale_fill_viridis_c(option = "mako", trans = "sqrt")
+    scale_fill_viridis_c(option = "plasma", trans = "sqrt")
 ```
 
 ### Customising to a color palette - Colorbrewer
@@ -90,9 +92,8 @@ ggplot(data = world_df) +
 ```{r}
 ggplot(data = world_df) +
     geom_sf(aes(fill = pop_est)) +
-    scale_fill_distiller(palette = 2)
+    scale_fill_distiller(palette = 4)
 ```
-
 
 ### Filtering to Africa
 
@@ -111,7 +112,7 @@ world_df |>
 
 ```
 
-### Explore several filters Views and Facetting 
+### Explore several filters Views and Facetting
 
 ```{r}
 world_df |> 
@@ -120,21 +121,29 @@ world_df |>
   geom_sf()
 ```
 
+```{r}
+world_df |> 
+  filter(admin == "Uganda") |> 
+  ggplot()+
+  geom_sf()
+```
 
-## Ugandas Case Study 
+## Ugandas Case Study
 
-Load data 
+Load data
+
 ```{r}
 uganda_sp <- st_read(here("Shape Files/Districts and Cities/uganda_districts_2019-wgs84.shp"))
 ```
 
-Plot basic Map 
+Plot basic Map
+
 ```{r}
 ggplot(data = uganda_sp)+
   geom_sf()
 ```
 
-Add water bodies 
+Add water bodies
 
 ```{r}
 water_sp <- st_read(here("Shape Files/Water Bodies/UGA_water_areas_dcw.shp"))
@@ -145,7 +154,8 @@ water_sp <- st_read(here("Shape Files/Water Bodies/UGA_water_areas_dcw.shp"))
    geom_sf(data = water_sp)
 ```
 
-Color the Water Bodies and Basic Styling 
+Color the Water Bodies and Basic Styling
+
 ```{r}
 ggplot(data = uganda_sp)+
   geom_sf()+
@@ -154,8 +164,4 @@ ggplot(data = uganda_sp)+
   labs(title = "Map of the Uganda", caption =  "DataSource: Open_Data_Uganda")
 ```
 
-### Merge Data to Maps 
-
-
-
-
+### Merge Data to Maps
