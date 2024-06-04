@@ -1,0 +1,53 @@
+---
+title: "Malaria Report"
+format: pdf
+editor: visual
+---
+
+![](MOH_Uganda_logo.png){fig-align="center" width="4cm"}
+
+## Summary Table
+
+## Malaria Cases Per 1,000 population
+
+### Monthly trend (national)
+
+### Map showing Distribution by District (Last 4 years)
+
+## Malaria Testing Rate
+
+### Monthly trend (national)
+
+### Map showing Distribution by District (Last 4 years)
+
+### Point map with point size at facility level (Last 4 years)
+
+## Malaria Test Positivity Rate
+
+### Monthly trend (national)
+
+### Map showing Distribution by District (Last 4 years)
+
+## Malaria as percentage of Total OPD
+
+### Monthly trend (national)
+
+### Map showing Distribution by District (Last 4 years)
+
+### Malaria deaths per 100,000 population
+
+### Monthly trend (national)
+
+### Map showing Distribution by District (Last 4 years)
+
+## Malaria deaths as % of Total Deaths
+
+### Monthly trend (national)
+
+### Map showing Distribution by District (Last 4 years)
+
+## Malaria case fatality Rate
+
+### Monthly trend (national)
+
+### Map showing Distribution by District (Last 4 years)
