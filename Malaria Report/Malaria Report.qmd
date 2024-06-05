@@ -1,12 +1,37 @@
 ---
 title: "Malaria Report"
 format: pdf
-editor: visual
 ---
 
-![](MOH_Uganda_logo.png){fig-align="center" width="4cm"}
-
 ## Summary Table
+
+```{r}
+pacman::p_load(
+  readxl, ## read xlsx
+  tidyverse, ## several packages for wrangling 
+  here,  ## locate files , 
+  gt
+)
+
+## load data 
+
+data_malaria <- read_excel(here("District_data.xlsx"))
+
+```
+
+## Districts with the most Deaths 
+```{r}
+top_districts_deaths <- data_malaria |> 
+  filter(grepl("No. of deaths", dataelement)) |> 
+  group_by(district) |> 
+  summarise(deaths = sum(value,na.rm = T)) |> 
+  slice_max(order_by = deaths , n = 10)
+
+top_districts_deaths |> 
+  gt()
+  
+```
+
 
 ## Malaria Cases Per 1,000 population
 
