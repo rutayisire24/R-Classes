@@ -1,14 +1,81 @@
 ---
 title: "Malaria Report"
+subtitle: "An Analytical Report for Malaria Trends"
+author: "Dr Meddy Rutayisire"
+date: "6th June 2024"
 format: 
   pdf:
      toc: true
+     number-sections: true
+execute: 
+  echo: false
+  warning: false
 ---
 
+```{r}
+pacman::p_load(
+  tidyverse , here, readxl, 
+  gt, lubridate
+)
+
+malaria_data <- read_excel(
+  here("District_data.xlsx")
+)
+
+poln_data <- read_excel(
+  here("population_data.xlsx")
+)
+```
+
 ## Summary Table
+```{r}
+summary_data <- malaria_data |> 
+  mutate(
+    period_date = dmy(period_date), 
+    year = year(period_date)) |> 
+  group_by(year , dataelement ) |> 
+  summarise(
+    values = sum(value, na.rm = T)
+  ) |> 
+  pivot_wider(
+    names_from = dataelement,
+    values_from = values
+  )
+ 
+total_poln <- sum(poln_data$Total) 
+summary_data$poln <- total_poln
+
+summary_data <- janitor::clean_names(summary_data)
+
+summary_table <- summary_data |> 
+  mutate(
+    malaria_cases_1000 = x108_ep01a_1_malaria_total_cases/poln*1000,
+    testing_rate = sum(x105_ps01a_malaria_microscopy_done,x105_ps02a_malaria_rd_ts_done)/x105_ep01a_suspected_fever,
+    test_positivity = sum(x105_ps01b_malaria_microscopy_positive,x105_ps02b_malaria_rd_ts_positive)/sum(x105_ps01a_malaria_microscopy_done,x105_ps02a_malaria_rd_ts_done)) |> 
+  select(
+    c(year, x105_ep01b_malaria_total,
+      malaria_cases_1000,testing_rate,
+      test_positivity))
+
+summary_table_clean <- summary_table |> 
+  mutate(
+    malaria_cases_1000 = round(malaria_cases_1000),
+    testing_rate = round(testing_rate*100),
+    test_positivity = round(test_positivity*100)
+  )
+
+```
+
+```{r}
+summary_table_clean |> 
+  ungroup() |> 
+  gt()
+```
 
 
 ## Malaria Cases Per 1,000 population
+
+
 
 ### Monthly trend (national)
 
