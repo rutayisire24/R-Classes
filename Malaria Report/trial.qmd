@@ -1,0 +1,28 @@
+---
+title: "first Quarto"
+format: html
+editor: visual
+execute: 
+  echo: false
+  message: false
+  warning: false
+---
+
+## Introduction
+
+![](MOH_Uganda_logo.png){fig-align="center" width="1.9cm" height="2cm"}
+
+This a **malaria report** showing analysis of trends in cases.
+
+```{r}
+pacman::p_load(
+  tidyverse,
+  readxl, here
+)
+
+malaria_data <- read_excel(here("District_data.xlsx"))
+
+head(malaria_data)
+
+```
+
